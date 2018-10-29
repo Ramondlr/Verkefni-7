@@ -50,9 +50,24 @@ function ask() {
 /**
  * Skilar tölu af handahófi á bilinu [min, max]
  */
+/*
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+*/
+
+function randomNumber(1, 100) {
+  return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
+}
+
+function randomNumberTwo(1, 10) {
+  return Math.floor(Math.random() * (10 - 1 + 1)) + 1;
+}
+
+function randomNumberThree(2, 10) {
+  return Math.floor(Math.random() * (10 - 2 + 1)) + 2;
+}
+
 
 // Byrjar leik
 start();
