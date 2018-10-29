@@ -5,7 +5,7 @@
  */
 
 // fasti sem segir til um hve marga leiki eigi að spila
-const GAMES_TO_PLAY = 10;
+const GAMES_TO_PLAY = 1;
 
 /**
  * Birtir upplýsingar um leik og eftir að notandi samþykkir spilar fyrsta leik
