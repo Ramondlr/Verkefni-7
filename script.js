@@ -5,7 +5,11 @@
  */
 
 // fasti sem segir til um hve marga leiki eigi að spila
-const GAMES_TO_PLAY = 1;
+/*const myTimer () {
+  let 
+}
+*/
+const GAMES_TO_PLAY = 3;
 
 /**
  * Birtir upplýsingar um leik og eftir að notandi samþykkir spilar fyrsta leik
@@ -13,7 +17,18 @@ const GAMES_TO_PLAY = 1;
  * Eftir leik er notanda boðið að spila annan leik, ef ekki hættir forrit.
  */
 function start() {
-  villa;
+  alert('Þegar smellt er á ok hnappann byrjar leikur þar sem markmiðið er að svara eins mörgum af 10 dæmum rétt eins hratt og mögulegt er.');
+
+  if (GAMES_TO_PLAY < 3) {
+    play();
+  } else {
+      break;
+    }
+    do {
+      play();
+    } while (confirm('Viltu spila annan leik?'))
+
+  //villa;
 }
 
 /**
@@ -28,6 +43,29 @@ function start() {
  *
  */
 function play() {
+  const random = randomNumber(100);
+  console.log(random); //sjá hver talan er í inspect
+
+  let correct = false;
+  let attemptsX = 0;
+
+  do {
+    const input = prompt('Giskaðu á tölu á milli 0-100');
+
+    if (input === null) {
+        break;
+    }
+    const parsedInput = parseGuess(input);
+    correct = parsedInput === random;
+
+    alert(getResponse(parsedInput, random));
+    attempts++;
+  } while (!correct);
+  
+  GAMES.push(attempts);
+  alert(`Rétt í ${attempts} ágiskunum`);
+
+  return true;
 }
 
 /**
@@ -50,12 +88,12 @@ function ask() {
 /**
  * Skilar tölu af handahófi á bilinu [min, max]
  */
-/*
+
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-*/
 
+/*
 function randomNumber(1, 100) {
   return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
 }
@@ -66,7 +104,7 @@ function randomNumberTwo(1, 10) {
 
 function randomNumberThree(2, 10) {
   return Math.floor(Math.random() * (10 - 2 + 1)) + 2;
-}
+}*/
 
 
 // Byrjar leik
