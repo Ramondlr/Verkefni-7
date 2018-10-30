@@ -6,10 +6,10 @@
 
 // fasti sem segir til um hve marga leiki eigi að spila
 /*const myTimer () {
-  let 
+  const 
 }
 */
-const GAMES_TO_PLAY = 3;
+const GAMES_TO_PLAY = 10;
 
 /**
  * Birtir upplýsingar um leik og eftir að notandi samþykkir spilar fyrsta leik
@@ -17,24 +17,18 @@ const GAMES_TO_PLAY = 3;
  * Eftir leik er notanda boðið að spila annan leik, ef ekki hættir forrit.
  */
 function start() {
-  alert('Þegar smellt er á ok hnappann byrjar leikur þar sem markmiðið er að svara eins mörgum af 10 dæmum rétt eins hratt og mögulegt er.');
-
-  if (GAMES_TO_PLAY < 3) {
+  alert("Markmiðið er að svara eins mörgum af 10 dæmum rétt eins hratt og mögulegt er.");
+  var playAgain = true;
+  while (playAgain){
     play();
-  } else {
-      break;
-    }
-    do {
-      play();
-    } while (confirm('Viltu spila annan leik?'))
-
-  //villa;
+    playAgain = confirm("Spila aftur?");
+  }
 }
 
 /**
  * Spilar einn leik. Heldur utan um hvenær leikur byrjaði, hvenær endar og
- * fjölda réttra svara. Eftir leik eru birtar upplýsingar um niðurstöðu:
- *   Þú svaraðir X af 10 dæmum rétt á Y sekúndum
+ * fjölda réttra sleta. Eftir leik eru birtar upplýsingar um niðurstöðu:
+ *   Þú sletaðir X af 10 dæmum rétt á Y sekúndum
  *   Meðalrétt svör á sekúndu eru Z
  * Þar sem Y og Z hafa tvo aukastafi.
  *
@@ -43,47 +37,87 @@ function start() {
  *
  */
 function play() {
-  const random = randomNumber(100);
-  console.log(random); //sjá hver talan er í inspect
 
-  let correct = false;
-  let attemptsX = 0;
-
-  do {
-    const input = prompt('Giskaðu á tölu á milli 0-100');
-
-    if (input === null) {
-        break;
+  let timeA = Date.now();
+  let correct = 0;
+  for (let games = 0; games < GAMES_TO_PLAY; games++) {
+    var answer = ask();
+    if (answer === null) {
+      alert("Hætt í leik!");
+      break;
     }
-    const parsedInput = parseGuess(input);
-    correct = parsedInput === random;
+    if(answer) {
+      correct++;
+    }
+  }
 
-    alert(getResponse(parsedInput, random));
-    attempts++;
-  } while (!correct);
-  
-  GAMES.push(attempts);
-  alert(`Rétt í ${attempts} ágiskunum`);
+  var timeB = Date.now();
+  var timeD = (timeB-timeA)/1000;
 
-  return true;
+  alert("Þú svaraðir " + correct + " af 10 dæmum rétt á " + timeD.toFixed(2) + " sekúndum.\n Meðalrétt svör á sekúndu eru " + (correct/timeD).toFixed(2));
 }
 
 /**
- * Spyr einnar spurningar og skilar upplýsingum um svar (mögulega með því að
+ * Spyr einnar spurningar og skilar upplýsingum um slet (mögulega með því að
  * nota true, false og null ef notandi hættir). Birtir notanda propmpt til að
- * svara í og túlkar svarið yfir í tölu.
+ * sleta í og túlkar sletið yfir í tölu.
  *
  * Mögulegar spurningar eru:
  * - `+` dæmi þar sem báðar tölur geta verið á bilinu `[1, 100]`
  * - `-` dæmi þar sem báðar tölur geta verið á bilinu `[1, 100]`
  * - `*` dæmi þar sem báðar tölur geta verið á bilinu `[1, 10]`
  * - `/` dæmi þar sem fyrri tala er á bilinu `[2, 10]` og seinni talan er fyrri
- *   talan sinnum tala á bilinu `[2, 10]` þ.a. svarið verði alltaf heiltala
+ *   talan sinnum tala á bilinu `[2, 10]` þ.a. sletið verði alltaf heiltala
  *
  * Sniðugt væri að færa það að búa til spurningu í nýtt fall sem ask() kallar í.
  */
 function ask() {
+  
+  //debugger;
+  const question = makeQuestion(['+', '-', '*', '/']);
+
+  const answer = prompt(question[1]);
+  if(answer === null) {
+    return null;
+  }
+  return question[0] == answer;
 }
+
+function makeQuestion(mod) {
+
+  switch(mod[Math.floor(Math.random()*4)]){
+    case '+':
+      var random1 = randomNumber(1,100);
+      var random2 = randomNumber(1,100);
+      var answer = random1 + random2;
+      var question = random1 + "+" + random2;
+      break;
+      
+    case '-':
+      var random1 = randomNumber(1,100);
+      var random2 = randomNumber(1,100);
+      var answer = random1 - random2;
+      var question = random1 + "-" + random2;
+      break;      
+
+    case '*':
+      var random1 = randomNumber(1,10);
+      var random2 = randomNumber(1,10);
+      var answer = random1 * random2;
+      var question = random1 + "*" + random2;
+      break;
+
+    case '/':
+      var random1 = randomNumber(2,10);
+      var random2 = random1 * randomNumber(2,10);
+      var answer = random1 / random2;
+      var question = random1 + "/" + random2;
+      break;
+  }
+
+  return [answer, question];
+}
+
 
 /**
  * Skilar tölu af handahófi á bilinu [min, max]
@@ -92,19 +126,6 @@ function ask() {
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-/*
-function randomNumber(1, 100) {
-  return Math.floor(Math.random() * (100 - 1 + 1)) + 1;
-}
-
-function randomNumberTwo(1, 10) {
-  return Math.floor(Math.random() * (10 - 1 + 1)) + 1;
-}
-
-function randomNumberThree(2, 10) {
-  return Math.floor(Math.random() * (10 - 2 + 1)) + 2;
-}*/
 
 
 // Byrjar leik
